@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>To-do List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" type="text/javascript" defer></script>
+</head>
+<body>
+    <header id="title">
+        <h1> To-do List </h1>
+    </header>
+    
+    <main class="mainContent">
+        <section class="container"> 
+            
+            <article class="AddNewTask"> 
+                <h2> Add New Task </h2> 
+                <form onsubmit="addNewTask(event)"> 
+                    <label for="taskText">Task Description</label>
+                    <input type="text" id="taskText" name="taskText" autocomplete="off" placeholder="What needs to be done?" class="roundBorder"/>
+                    <br>
+                    <label for="due_date">Due date</label>
+                    <input type="date" id="due_date" name="due_date" class="roundBorder">
+                    <br>
+                    <label for="comment">Comment</label>
+                    <textarea id="comment" name="comment" cols="40" rows="5" placeholder="Add a comment to this task..." class="roundBorder"></textarea>
+                    <br>
+                    <button type="submit" class="addTaskButton roundBorder button-30">Add</button>
+                    <button type="reset" class="resetButton roundBorder button-30">Clear</button>
+                    <button type="button" class="orderButton roundBorder button-30" onclick="renderOrderedTasks()">Sort</button>
+                </form>
+
+            </article>
+            <article class="formResults">
+                <h2> My tasks </h2>
+                <div id="taskContainer"></div>
+            </article>
+
+        </section>
+        
+    </main>
+    
+    <footer>
+        <section>
+            <a href="#title">Go back</a>
+            <a href="mailto:jeezmax17@gmail.com">Contact here</a>
+        </section>
+        <p>© 2025 To-do List Application</p>
+    </footer>
+</body>
