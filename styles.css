@@ -1,3 +1,4 @@
+/* Config general */
 html {
     font-family: 'Montserrat', 'sans-serif';
 }
@@ -33,8 +34,13 @@ header h1 {
     text-align: center;
 }
 
+.roundBorder {
+    border-radius: 5px;
+}
+
+/* Secciones y articulos */
 .container{
-    width: 400px;
+    width: 600px;
     margin: 0 auto;
 }
 
@@ -49,19 +55,27 @@ section article {
 
 section article h2,
 section article form,
-section article div
-{
+section article div {
     margin: 1rem;
 }
+
+section article h2
+{
+    text-align: center;
+}
+
+/* Tabla */
+section article form table tbody tr td, section article form table tbody tr td {
+  border: 0px solid #0026ff;
+  padding: 10px 20px;
+}
+
 
 section article:hover {
     box-shadow: 0 0.1rem 0.4rem rgba(0,0,0,0.3);
 }
 
-.roundBorder {
-    border-radius: 5px;
-}
-
+/* Footer */
 footer {
     background-color: #222;
     padding: 3rem;
@@ -89,8 +103,14 @@ footer a:hover {
 
 
 /* Button */
+.buttonBox {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    height: 100%;
+    gap: 45px;                  /* margen entre los botones */
+}
 
-/* CSS */
 .button-30 {
   align-items: center;
   appearance: none;
@@ -103,7 +123,8 @@ footer a:hover {
   cursor: pointer;
   display: inline-flex;
   font-family: "JetBrains Mono",monospace;
-  height: 48px;
+  height: 28px;
+  width: auto;
   justify-content: center;
   line-height: 1;
   list-style: none;
@@ -135,3 +156,55 @@ footer a:hover {
   box-shadow: #D6D6E7 0 3px 7px inset;
   transform: translateY(2px);
 }
+
+/* taskContainer config */
+.individualTask {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0 auto 1rem auto; /* centrado horizontal */
+}
+
+.taskDivInfo {
+    transition: box-shadow 0.3s ease;
+    flex-grow: 1; /* Ocupará el espacio restante */
+    margin: 0 0.5rem 0 0;
+    padding: 0.25rem 0;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 0px 3px rgba(45, 35, 66, 0.4);
+    cursor: pointer;
+}
+
+.taskDivInfo:hover {
+    box-shadow: 0 0.1rem 0.4rem rgba(0,0,0,0.3);
+}
+
+.taskButtons {
+    display: flex;
+    flex-direction: column;  /* Apila los botones verticalmente */
+    gap: 1rem;              /* Espacio entre ellos */
+}
+
+.taskInfo {
+    margin: 1rem;
+    width: 350px;
+    overflow-wrap: break-word;
+}
+
+.taskDivInfo.done {
+    background-color: #595b7491;
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+
+/* 
+
+.individualTask
+    => taskDivInfo
+    => taskButtons
+
+
+*/
+

@@ -15,29 +15,40 @@
     </header>
     
     <main class="mainContent">
+        
         <section class="container"> 
             
             <article class="AddNewTask"> 
                 <h2> Add New Task </h2> 
                 <form onsubmit="addNewTask(event)"> 
-                    <label for="taskText">Task Description</label>
-                    <input type="text" id="taskText" name="taskText" autocomplete="off" placeholder="What needs to be done?" class="roundBorder"/>
-                    <br>
-                    <label for="due_date">Due date</label>
-                    <input type="date" id="due_date" name="due_date" class="roundBorder">
-                    <br>
-                    <label for="comment">Comment</label>
-                    <textarea id="comment" name="comment" cols="40" rows="5" placeholder="Add a comment to this task..." class="roundBorder"></textarea>
-                    <br>
-                    <button type="submit" class="addTaskButton roundBorder button-30">Add</button>
-                    <button type="reset" class="resetButton roundBorder button-30">Clear</button>
-                    <button type="button" class="orderButton roundBorder button-30" onclick="renderOrderedTasks()">Sort</button>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td><label for="taskText">Task Description</label></td>
+                                <td><input type="text" id="taskText" name="taskText" autocomplete="off" placeholder="What needs to be done?" class="roundBorder"/></td>
+                            </tr>
+                            <tr>
+                                <td><label for="due_date">Due date</label></td>
+                                <td><input type="date" id="due_date" name="due_date" class="roundBorder"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="comment">Comment</label></td>
+                                <td><textarea id="comment" name="comment" cols="40" rows="3" placeholder="Add a comment to this task..." class="roundBorder"></textarea></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="buttonBox">
+                        <button type="submit" class="addTaskButton roundBorder button-30">Add</button>
+                        <button type="reset" class="resetButton roundBorder button-30">Clear</button>
+                        <button type="button" class="orderButton roundBorder button-30" onclick="renderOrderedTasks()">Sort</button>
+                    </div>
                 </form>
 
             </article>
+            
             <article class="formResults">
                 <h2> My tasks </h2>
-                <div id="taskContainer"></div>
+                <div id="taskContainer"></div> <!-- Acá se agregan los div de las nuevas tareas -->
             </article>
 
         </section>
