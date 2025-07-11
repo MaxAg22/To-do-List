@@ -24,7 +24,7 @@ body {
 }
 
 header {
-    background-color: #364552;
+    background-color: #002B2A;
     color: white;
     padding: 3rem 2rem;
 }
@@ -99,8 +99,6 @@ footer a {
 footer a:hover {
     color: cornflowerblue;
 }
-
-
 
 /* Button */
 .buttonBox {
@@ -198,3 +196,26 @@ footer a:hover {
     opacity: 0.6;
     text-decoration: line-through;
 }
+
+/* text input config */
+input, textarea {
+  background: none;
+  border: none;
+  outline: none;
+  width: 100%;
+  max-width: 400px;
+  font-size: 1.2em;
+  transition: padding 0.3s 0.2s ease;
+  resize: none;
+}
+
+.field {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* sombra suave */
+  background-color: white; /* opcional para destacar */
+}
+
+

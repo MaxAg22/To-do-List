@@ -135,8 +135,8 @@ const deleteTask = event => {
     const taskInfo = taskDiv.querySelector('.taskDivInfo');
 
     const title = taskInfo.querySelector('.taskName').textContent;
-    const comment = taskInfo.querySelector('.taskComment').textContent;
-    const dueDateText = taskInfo.querySelector('.dueDate').textContent;
+    const comment = taskInfo.querySelector('.taskComment')?.textContent ?? "";
+    const dueDateText = taskInfo.querySelector('.dueDate')?.textContent ?? "";
 
     deleteTaskFromLocalStorage(title, comment, dueDateText.replace("Due: ", ""));
 };
@@ -172,21 +172,25 @@ function LoadFromLocalStorage() {
     let done;
     for(element of tasks) {
         title = element.title;
-        comment = element.comment;
-        dueDate = element.dueDate;
+        comment = element.comment ?? "";
+        dueDate = element.dueDate ?? "";
         done = element.done;
 
+        console.log(comment);
+        console.log(dueDate);
         createDiv(title, comment, dueDate, done);
     }
+
+    renderOrderedTasks();
 
 }
 
 function updateFromLocalStorage(taskDivInfo) {
     
     const title = taskDivInfo.querySelector('.taskName').textContent;
-    const comment = taskDivInfo.querySelector('.taskComment').textContent;
-    const dueDate = taskDivInfo.querySelector('.dueDate').textContent;
-    const dueDateText = dueDate.replace("Due: ", "");
+    const comment = taskDivInfo.querySelector('.taskComment')?.textContent ?? "";
+    const dueDate = taskDivInfo.querySelector('.dueDate')?.textContent ?? "";
+    const dueDateText = dueDate.replace("Due: ", "") ?? "";
 
     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
