@@ -1,3 +1,7 @@
+document.addEventListener('DOMContentLoaded', () => {
+  LoadFromLocalStorage(); // ejecutes when DOM is ready
+});
+
 // taskContainer
 const taskContainer = document.getElementById('taskContainer');
 
@@ -13,6 +17,16 @@ const addNewTask = event => {
     // Retrieve comment from the form
     const comment = event.target.comment.value;
     
+    const taskDiv = createDiv(value, comment, date, false);
+
+    // Store in local storage
+    saveTaskToLocalStorage(value, comment, date, taskDiv);
+    
+    event.target.reset();
+};
+
+function createDiv(title, comment, dueDate, done) {
+
     // Create a 'div' to store the new task
     const taskDiv = document.createElement('div');
     taskDiv.classList.add('individualTask');
@@ -23,10 +37,10 @@ const addNewTask = event => {
 
     // Create a 'p' to store due date
     const taskDueDate = document.createElement('p');
-    if(date) {    
+    if(dueDate) {    
         taskDueDate.classList.add('roundBorder', 'dueDate', 'taskInfo');
         
-        taskDueDate.textContent = `Due: ${event.target.due_date.value}`;
+        taskDueDate.textContent = `Due: ${dueDate}`;
         taskInfo.prepend(taskDueDate);
     }
 
@@ -41,7 +55,7 @@ const addNewTask = event => {
     // Create a 'p' to store task name
     const taskName = document.createElement('p');
     taskName.classList.add('roundBorder', 'taskName', 'taskInfo');
-    taskName.textContent = value;
+    taskName.textContent = title;
     taskInfo.prepend(taskName);
 
     // Create a div container to hold/manage the buttons
@@ -61,17 +75,21 @@ const addNewTask = event => {
     doneButton.addEventListener('click', changeTaskStateFromButton);
     taskButtons.prepend(doneButton);
 
+    // check if is a new task or done task
+    if(done) {
+        taskInfo.classList.toggle('done');
+        taskDiv.classList.toggle('done');
+    }
+
     // Final div taskInfo + taskButtons
     taskInfo.addEventListener('click', changeTaskState)
     taskDiv.prepend(taskButtons);
     taskDiv.prepend(taskInfo);
     taskContainer.prepend(taskDiv);
 
-    // Store in local storage
-    saveTaskToLocalStorage(value, comment, taskDueDate.textContent);
-    
-    event.target.reset();
-};
+    // In order to obtain information about task state
+    return taskDiv;
+}
 
 const changeTaskState = event => {
     const taskDivInfo = event.currentTarget
@@ -79,6 +97,8 @@ const changeTaskState = event => {
     
     taskDivInfo.classList.toggle('done');
     taskDiv.classList.toggle('done');
+
+    updateFromLocalStorage(taskDivInfo);
 };
 
 const changeTaskStateFromButton = event => {
@@ -88,6 +108,8 @@ const changeTaskStateFromButton = event => {
 
     taskDivInfo.classList.toggle('done');
     individualTask.classList.toggle('done');
+
+    updateFromLocalStorage(taskDivInfo);
 };
 
 const order = () => {
@@ -116,15 +138,20 @@ const deleteTask = event => {
     const comment = taskInfo.querySelector('.taskComment').textContent;
     const dueDateText = taskInfo.querySelector('.dueDate').textContent;
 
-    deleteTaskFromLocalStorage(title, comment, dueDateText);
+    deleteTaskFromLocalStorage(title, comment, dueDateText.replace("Due: ", ""));
 };
 
-function saveTaskToLocalStorage(title, comment, dueDate) {
+
+// localStorage functions
+function saveTaskToLocalStorage(title, comment, dueDate, taskDiv) {
     const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    tasks.push({ title, comment, dueDate });
+    
+    const done = taskDiv.classList.contains('done') ? true : false;
+
+    tasks.push({ title, comment, dueDate, done });
+
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
-
 
 function deleteTaskFromLocalStorage(title, comment, dueDate) {
     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
@@ -133,7 +160,45 @@ function deleteTaskFromLocalStorage(title, comment, dueDate) {
         !(t.title === title && t.comment === comment && t.dueDate === dueDate)
     );
 
-    console.log(tasks);
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
+function LoadFromLocalStorage() {
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    
+    let title;
+    let comment;
+    let dueDate;
+    let done;
+    for(element of tasks) {
+        title = element.title;
+        comment = element.comment;
+        dueDate = element.dueDate;
+        done = element.done;
+
+        createDiv(title, comment, dueDate, done);
+    }
+
+}
+
+function updateFromLocalStorage(taskDivInfo) {
+    
+    const title = taskDivInfo.querySelector('.taskName').textContent;
+    const comment = taskDivInfo.querySelector('.taskComment').textContent;
+    const dueDate = taskDivInfo.querySelector('.dueDate').textContent;
+    const dueDateText = dueDate.replace("Due: ", "");
+
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    for(t of tasks) {
+        if (t.title === title && t.comment === comment && t.dueDate === dueDateText) {
+            if(taskDivInfo.classList.contains('done')) {
+                t.done = true;
+            } else {
+                t.done = false;
+            }
+        }
+    }
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
