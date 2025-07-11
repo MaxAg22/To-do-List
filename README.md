@@ -1,6 +1,7 @@
 # 📝 To-Do List Web App
 
 A lightweight and simple task manager designed to run locally in your browser. No installation or internet required — just clone the repo and open the `index.html` file.
+![](img/image.png)
 
 ## Features
 
