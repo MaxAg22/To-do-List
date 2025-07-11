@@ -12,4 +12,6 @@ A lightweight and simple task manager designed to run locally in your browser. N
 # 
 
 
-![](img/image.png)
+<p align="center">
+  <img src="img/image.png" width="600"/>
+</p>
