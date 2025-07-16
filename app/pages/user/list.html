@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../public/listStyle.css">
+    <link rel="stylesheet" href="listStyle.css">
 </head>
 <body>
     <header id="title">
@@ -53,6 +53,10 @@
                         <button type="submit" class="addTaskButton roundBorder button-30">Add</button>
                         <button type="reset" class="resetButton roundBorder button-30">Clear</button>
                         <button type="button" class="orderButton roundBorder button-30" onclick="renderOrderedTasks()">Sort</button>
+
+                        <button id="signOutButton" type="button" class="roundBorder button-30" onclick="renderOrderedTasks()">sign out</button>
+
+
                     </div>
                 </form>
 
@@ -75,5 +79,5 @@
         <p>© 2025 To-do List Application</p>
     </footer>
 
-    <script src="../../public/list.js" type="text/javascript" defer></script>
+    <script src="list.js" type="text/javascript" defer></script>
 </body>

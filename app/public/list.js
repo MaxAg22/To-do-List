@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
   LoadFromLocalStorage(); // ejecutes when DOM is ready
 });
 
+document.getElementById("signOutButton").addEventListener("click",()=>{
+  document.cookie ='jwt=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  document.location.href = "/"
+})
+
 // taskContainer
 const taskContainer = document.getElementById('taskContainer');
 
