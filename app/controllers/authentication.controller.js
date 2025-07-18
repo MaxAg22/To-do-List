@@ -1,6 +1,8 @@
 import bcryptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
 import dotenv from "dotenv";
+import { getConnection } from '../database.js';
+
 
 dotenv.config();
 
@@ -10,22 +12,30 @@ export const usuarios = [{
   password: "$2a$05$nLY2It8riku2vwwDIINdgO/XIyPXRg1Gn9LFgnhwKqC4TwcAwEUL2"
 }]
 
-
 async function login(req,res){
-  console.log(req.body);
+
+  console.log("input: " + JSON.stringify(req.body));
   const user = req.body.user;
   const password = req.body.password;
   if(!user || !password){
     return res.status(400).send({status:"Error",message:"Los campos están incompletos"})
   }
-  const usuarioAResvisar = usuarios.find(usuario => usuario.user === user);
+
+  // database query
+  const connection = await getConnection();
+  const usuariosDB = await connection.query("SELECT * from users");
+
+  // check if user is in database
+  const usuarioAResvisar = usuariosDB.find(usuario => usuario.user == user);
   if(!usuarioAResvisar){
     return res.status(400).send({status:"Error",message:"Error durante login"})
   }
-  const loginCorrecto = await bcryptjs.compare(password,usuarioAResvisar.password);
+
+  const loginCorrecto = await bcryptjs.compare(password, usuarioAResvisar.password);
   if(!loginCorrecto){
     return res.status(400).send({status:"Error",message:"Error durante login"})
   }
+
   const token = jsonwebtoken.sign(
     {user:usuarioAResvisar.user},
     process.env.JWT_SECRET,
