@@ -6,12 +6,6 @@ import { getConnection } from '../database.js';
 
 dotenv.config();
 
-export const usuarios = [{
-  user: "a",
-  email: "a@a.com",
-  password: "$2a$05$nLY2It8riku2vwwDIINdgO/XIyPXRg1Gn9LFgnhwKqC4TwcAwEUL2"
-}]
-
 async function login(req,res){
 
   // Check input
@@ -33,9 +27,12 @@ async function login(req,res){
     return res.status(400).send({status:"Error",message:"Error durante login"})
   }
 
+  console.log("Este es el user id:", userDB[0].id);
+
   // Create new token
   const token = jsonwebtoken.sign(
     {
+      id: userDB[0].id, 
       user:userDB[0].user,
       email: userDB[0].email
     },
@@ -48,7 +45,7 @@ async function login(req,res){
   }
 
   res.cookie("jwt",token,cookieOption);
-  res.send({status:"ok",message:"Usuario loggeado",redirect:"/admin"});
+  res.send({status:"ok",message:"Usuario loggeado",redirect:"/user"});
 
   console.log("Usuario encontrado con éxito: ", userDB[0]);
 }

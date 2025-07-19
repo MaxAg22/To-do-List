@@ -158,6 +158,17 @@ footer a:hover {
   transform: translateY(2px);
 }
 
+.error{
+  color: rgb(255, 81, 81);
+  margin: 1rem;
+  text-align: center;
+}
+
+.hide{
+  display: none;
+}
+
+
 /* taskContainer config */
 .individualTask {
     display: flex;

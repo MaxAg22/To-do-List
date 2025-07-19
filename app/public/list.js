@@ -1,11 +1,73 @@
-document.addEventListener('DOMContentLoaded', () => {
-  LoadFromLocalStorage(); // ejecutes when DOM is ready
-});
+const errorMessage = document.getElementsByClassName("error")[0]
 
 document.getElementById("signOutButton").addEventListener("click",()=>{
   document.cookie ='jwt=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   document.location.href = "/"
+});
+
+document.getElementById("task-form").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const taskDescription = e.target.taskText.value;
+    const comment = e.target.comment.value;
+    const dueDate = e.target.due_date.value;
+    const res = await fetch("http://localhost:4000/api/addTask",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            taskDescription,
+            comment,
+            dueDate,
+            done:0
+        })
+    });
+
+    /*
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // <--- esto es clave si usás CORS
+        body: JSON.stringify(data)
+    });
+    
+    
+    */
+    
+    // Agregar verificacón!
+
+    if(!res.ok) return errorMessage.classList.toggle("hide", false);
+});
+
+
+
+/*
+document.getElementById("login-form").addEventListener("submit",async (e)=>{
+  e.preventDefault();
+  const user = e.target.children.user.value;
+  const password = e.target.children.password.value;
+  const res = await fetch("http://localhost:4000/api/login",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      user,password
+    })
+  });
+  if(!res.ok) return mensajeError.classList.toggle("escondido",false);
+  const resJson = await res.json();
+  if(resJson.redirect){
+    window.location.href = resJson.redirect;
+  }
 })
+*/
+
+/*
+document.addEventListener('DOMContentLoaded', () => {
+  LoadFromLocalStorage(); // ejecutes when DOM is ready
+});
 
 // taskContainer
 const taskContainer = document.getElementById('taskContainer');
@@ -211,3 +273,4 @@ function updateFromLocalStorage(taskDivInfo) {
 
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+    */
