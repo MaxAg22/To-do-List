@@ -40,3 +40,4 @@ app.post("/api/register",authentication.register);
 
 //Task
 app.post("/api/addTask",taskOptions.addTask);
+app.get("/api/loadTask",taskOptions.loadTask);

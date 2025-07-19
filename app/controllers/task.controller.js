@@ -12,9 +12,6 @@ async function addTask(req,res) {
 
   if(!taskDescription) return res.status(400).send({status:"Error",message:"Missing task description"});
 
-  console.log('Cookies:', req.cookies);
-
-
   // Get user-id
   const token = req.cookies.jwt;
   if (!token) return res.status(401).send("Unauthorized");
@@ -26,10 +23,7 @@ async function addTask(req,res) {
     return res.status(403).send("Invalid token");
   }
 
-  console.log("esta es la cookie clean:", payload);
-
   const userId = payload.id; 
-  console.log("este es el user id: ", userId);
 
   // Insert to database
   const connection = await getConnection();
@@ -43,6 +37,34 @@ async function addTask(req,res) {
   return res.status(201).send({status:"ok",message:`Tarea ${taskDescription} agregada`});
 }
 
+async function loadTask(req,res) {
+  try{
+    // Get user-id
+    const token = req.cookies.jwt;
+    if (!token) return res.status(401).send("Unauthorized");
+
+    let payload;
+    try {
+      payload = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(403).send("Invalid token");
+    }
+
+    const userId = payload.id; 
+
+    // database query
+    const connection = await getConnection();
+    const taskDB = await connection.query("SELECT * from task WHERE user_id = ?", userId);
+    if(taskDB.length === 0) return res.status(400).send({status: "Error",message: `No se encuentran tareas del usuario con el id: ${userId}`});
+
+      res.json(taskDB);
+  } catch(error) {
+    console.error("Error al cargar tareas:", error);
+    res.status(500).json({ status: "Error", message: "Error interno del servidor" });
+  }
+}
+
 export const methods = {
-  addTask
+  addTask,
+  loadTask
 }
