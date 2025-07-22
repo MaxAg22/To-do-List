@@ -1,10 +1,12 @@
+import { API_URL } from './apiConfig.js';
+
 const mensajeError = document.getElementsByClassName("error")[0]
 
 document.getElementById("login-form").addEventListener("submit",async (e)=>{
   e.preventDefault();
   const user = e.target.children.user.value;
   const password = e.target.children.password.value;
-  const res = await fetch("http://localhost:4000/api/login",{
+  const res = await fetch(`${API_URL}/api/login`,{
     method:"POST",
     headers:{
       "Content-Type":"application/json"

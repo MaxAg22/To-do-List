@@ -1,3 +1,5 @@
+import { API_URL } from './apiConfig.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   LoadFromDataBase(); // ejecutes when DOM is ready
 });
@@ -20,7 +22,7 @@ document.getElementById("task-form").addEventListener("submit", async (e)=>{
     const taskDescription = e.target.taskText.value;
     const comment = e.target.comment.value;
     const dueDate = e.target.due_date.value;
-    const res = await fetch("http://localhost:4000/api/addTask",{
+    const res = await fetch(`${API_URL}/api/addTask`,{
         method:"POST",
         headers:{
             "Content-Type":"application/json"
@@ -163,7 +165,7 @@ const order = () => {
 // dataBase functions
 async function LoadFromDataBase() {
     
-    const res = await fetch("http://localhost:4000/api/loadTask",{
+    const res = await fetch(`${API_URL}/api/loadTask`,{
         method: "GET",
         headers: {
             "Content-Type": "application/json"
@@ -175,18 +177,20 @@ async function LoadFromDataBase() {
     const data = await res.json();
     console.log("Server response: ", data);
 
-    for(element of data.task){
-        taskDescription = element.description;
-        comment = element.comment ?? "";
-        dueDate = element.duedate ?? "";
-        done = element.done;
-        taskId = element.id;
+    if(data.task) {
+        for(let element of data.task){
+            let taskDescription = element.description;
+            let comment = element.comment ?? "";
+            let dueDate = element.duedate ?? "";
+            let done = element.done;
+            let taskId = element.id;
 
-        console.log(comment);
-        console.log(dueDate);
-        createDiv(taskDescription, comment, dueDate, done, taskId);
+            console.log(comment);
+            console.log(dueDate);
+            createDiv(taskDescription, comment, dueDate, done, taskId);
+        }
+        renderOrderedTasks();
     }
-    renderOrderedTasks();
 }
 
 async function updateFromDataBase(taskDivInfo) {
@@ -198,7 +202,7 @@ async function updateFromDataBase(taskDivInfo) {
     const done = taskDivInfo.classList.contains('done') ? true : false;
     const id = taskDivInfo.dataset.id;
 
-    const res = await fetch("http://localhost:4000/api/updateTask",{
+    const res = await fetch(`${API_URL}/api/updateTask`,{
         method:"POST",
         headers:{
             "Content-Type":"application/json"
@@ -220,7 +224,7 @@ async function updateFromDataBase(taskDivInfo) {
 
 async function deleteTaskFromDataBase(taskId) {
 
-    const res = await fetch("http://localhost:4000/api/deleteTask", {
+    const res = await fetch(`${API_URL}/api/deleteTask`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
