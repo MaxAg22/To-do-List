@@ -3,7 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const addErrorMessage = document.getElementsByClassName("addError")[0];
-const loadErrorMessage = document.getElementsByClassName("loadError")[0]
+const loadErrorMessage = document.getElementsByClassName("loadError")[0];
+const updateErrorMessage = document.getElementsByClassName("updateError")[0];
+const deleteErrorMessage = document.getElementsByClassName("deleteError")[0];
 
 
 // taskContainer
@@ -34,13 +36,15 @@ document.getElementById("task-form").addEventListener("submit", async (e)=>{
     });
     
     if(!res.ok) return addErrorMessage.classList.toggle("hide", false);
+    const data = await res.json();
+    console.log("Server response: ", data);
 
-    if(taskDescription) createDiv(taskDescription, comment, dueDate, false);
+    if(taskDescription) createDiv(taskDescription, comment, dueDate, false, data.id);
 
     e.target.reset();
 });
 
-function createDiv(taskDescription, comment, dueDate, done) {
+function createDiv(taskDescription, comment, dueDate, done, id) {
 
     // Create a 'div' to store the new task
     const taskDiv = document.createElement('div');
@@ -49,6 +53,9 @@ function createDiv(taskDescription, comment, dueDate, done) {
     // Create a 'div' to store the new task info
     const taskInfo = document.createElement('div');
     taskInfo.classList.add('taskDivInfo');
+    
+    // Set task id in order to modify later
+    taskInfo.dataset.id = id;
 
     // Create a 'p' to store due date
     const taskDueDate = document.createElement('p');
@@ -135,12 +142,9 @@ const deleteTask = event => {
 
     // Delete task from dataBase
     const taskInfo = taskDiv.querySelector('.taskDivInfo');
+    const taskId = taskInfo.dataset.id;
 
-    const taskDescription = taskInfo.querySelector('.taskName').textContent;
-    const comment = taskInfo.querySelector('.taskComment')?.textContent ?? "";
-    const dueDateText = taskInfo.querySelector('.dueDate')?.textContent ?? "";
-
-    deleteTaskFromDataBase(taskDescription, comment, dueDateText.replace("Due: ", ""));
+    deleteTaskFromDataBase(taskId);
 };
 
 // Order functions
@@ -168,60 +172,64 @@ async function LoadFromDataBase() {
         credentials: "include"
     });
 
+    if(!res.ok) return loadErrorMessage.classList.toggle("hide", false);
     const data = await res.json();
+    console.log("Server response: ", data);
 
     for(element of data){
         taskDescription = element.description;
         comment = element.comment ?? "";
         dueDate = element.duedate ?? "";
         done = element.done;
+        taskId = element.id;
 
         console.log(comment);
         console.log(dueDate);
-        createDiv(taskDescription, comment, dueDate, done);
+        createDiv(taskDescription, comment, dueDate, done, taskId);
     }
+    renderOrderedTasks();
 }
 
-function updateFromDataBase() {
-
-}
-
-function deleteTaskFromDataBase() {
-
-}
-
-
-
-/*
-function deleteTaskFromLocalStorage(taskDescription, comment, dueDate) {
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
-    tasks = tasks.filter(t => 
-        !(t.taskDescription === taskDescription && t.comment === comment && t.dueDate === dueDate)
-    );
-
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-function updateFromLocalStorage(taskDivInfo) {
-    
+async function updateFromDataBase(taskDivInfo) {
     const taskDescription = taskDivInfo.querySelector('.taskName').textContent;
     const comment = taskDivInfo.querySelector('.taskComment')?.textContent ?? "";
     const dueDate = taskDivInfo.querySelector('.dueDate')?.textContent ?? "";
     const dueDateText = dueDate.replace("Due: ", "") ?? "";
 
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    const done = taskDivInfo.classList.contains('done') ? true : false;
+    const id = taskDivInfo.dataset.id;
 
-    for(t of tasks) {
-        if (t.taskDescription === taskDescription && t.comment === comment && t.dueDate === dueDateText) {
-            if(taskDivInfo.classList.contains('done')) {
-                t.done = true;
-            } else {
-                t.done = false;
-            }
-        }
-    }
+    const res = await fetch("http://localhost:4000/api/updateTask",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            taskDescription,
+            comment,
+            dueDateText,
+            done,
+            id
+        })
+    });
 
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    if(!res.ok) return updateErrorMessage.classList.toggle("hide", false);
+    const data = await res.json();
+    console.log("Server response: ", data);
 }
-*/
+
+async function deleteTaskFromDataBase(taskId) {
+
+    const res = await fetch("http://localhost:4000/api/deleteTask", {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({taskId})
+    });
+        
+    if(!res.ok) return deleteErrorMessage.classList.toggle("hide", false);
+    const data = await res.json();
+    console.log("Server response: ", data);
+}

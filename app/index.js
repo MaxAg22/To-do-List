@@ -3,7 +3,6 @@ import cookieParser from 'cookie-parser';
 import morgan from "morgan";
 import cors from 'cors';
 
-
 //Fix para __direname
 import path from 'path';
 import {fileURLToPath} from 'url';
@@ -30,7 +29,6 @@ app.use(cors({
   credentials: true
 }));
 
-
 //Rutas
 app.get("/",authorization.soloPublico, (req,res)=> res.sendFile(__dirname + "/pages/login.html"));
 app.get("/register",authorization.soloPublico,(req,res)=> res.sendFile(__dirname + "/pages/register.html"));
@@ -39,5 +37,7 @@ app.post("/api/login",authentication.login);
 app.post("/api/register",authentication.register);
 
 //Task
-app.post("/api/addTask",taskOptions.addTask);
-app.get("/api/loadTask",taskOptions.loadTask);
+app.post("/api/addTask", authorization.getUserId, taskOptions.addTask);
+app.get("/api/loadTask", authorization.getUserId, taskOptions.loadTask);
+app.post("/api/updateTask", authorization.getUserId, taskOptions.updateTask);
+app.delete("/api/deleteTask", authorization.getUserId, taskOptions.deleteTask);

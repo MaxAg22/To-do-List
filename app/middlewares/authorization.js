@@ -2,8 +2,19 @@ import jsonwebtoken from "jsonwebtoken";
 import dotenv from "dotenv";
 import { getConnection } from '../database.js';
 
-
 dotenv.config();
+
+async function getUserId(req,res,next) {
+  const token = req.cookies.jwt;
+  if (!token) return res.status(401).send("Unauthorized");
+  try {
+    const payload = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+    req.user = payload;  
+    next();
+  } catch (err) {
+    return res.status(403).send("Invalid token");
+  }
+}
 
 async function soloUser(req,res,next){
   const logueado = await revisarCookie(req);
@@ -35,9 +46,9 @@ async function revisarCookie(req){
   }
 }
 
-
 export const methods = {
   soloUser,
   soloPublico,
+  getUserId
 }
 
