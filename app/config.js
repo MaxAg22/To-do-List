@@ -15,3 +15,6 @@ export const JWT_COOKIE_EXPIRES = process.env.JWT_COOKIE_EXPIRES;
 
 console.log("Config DB_HOST:", process.env.DB_HOST);
 console.log("Config DB_PORT:", process.env.DB_PORT);
+
+console.log("Todas las variables env en producción:");
+console.log(process.env);
