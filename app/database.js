@@ -19,5 +19,10 @@ export const getConnection = async () => {
       password: DB_PASSWORD
     });
   }
+
+  console.log("Database config:",
+  DB_HOST, DB_PORT, DB_USER, DB_NAME
+  );
+
   return connection;
 };
