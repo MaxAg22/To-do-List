@@ -149,7 +149,11 @@ const deleteTask = event => {
 };
 
 // Order functions
-const renderOrderedTasks = () => {
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("sortButton").addEventListener('click', renderOrderedTasks);
+});
+
+function renderOrderedTasks() {
     order().forEach(element => taskContainer.appendChild(element))
 }
 
@@ -191,6 +195,7 @@ async function LoadFromDataBase() {
         }
         renderOrderedTasks();
     }
+    
 }
 
 async function updateFromDataBase(taskDivInfo) {
