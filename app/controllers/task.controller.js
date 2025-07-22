@@ -15,7 +15,7 @@ async function addTask(req,res) {
   // Insert to database
   const connection = await getConnection();
 
-  const result = await connection.query(
+  const [result] = await connection.query(
     "INSERT INTO task (description, comment, duedate, done, user_id) VALUES (?, ?, ?, ?, ?)",
     [taskDescription, comment, dueDate, done, userId]
   );
@@ -33,7 +33,7 @@ async function loadTask(req,res) {
 
     // database query
     const connection = await getConnection();
-    const taskDB = await connection.query("SELECT * from task WHERE user_id = ?", userId);
+    const [taskDB] = await connection.query("SELECT * from task WHERE user_id = ?", userId);
     if(taskDB.length === 0) return res.status(200).send({status: "ok",message: ` No tasks found for user with id: ${userId}`});
     return res.status(200).send({status: "ok",message: "Tasks loaded",task: taskDB});
   } catch(error) {
@@ -55,7 +55,7 @@ async function updateTask(req,res) {
   // Modify database
   const connection = await getConnection();
 
-  const result = await connection.query(
+  const [result] = await connection.query(
     "UPDATE task SET done = ? WHERE id = ? AND user_id = ?",
     [done, taskId, userId]
   );
@@ -79,7 +79,7 @@ async function deleteTask(req,res) {
   // Delete from database
   const connection = await getConnection();
 
-  const result = await connection.query(
+  const [result] = await connection.query(
     "DELETE FROM task WHERE id = ? AND user_id = ?",
     [taskId, userId]
   );

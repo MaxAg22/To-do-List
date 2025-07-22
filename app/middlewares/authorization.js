@@ -34,7 +34,7 @@ async function revisarCookie(req){
     console.log("Cookie decodificada: ", JSON.stringify(decodificada));
     
     const connection = await getConnection();
-    const userDB = await connection.query("SELECT * from user WHERE user = ?", decodificada.user);
+    const [userDB] = await connection.query("SELECT * from user WHERE user = ?", [decodificada.user]);
     console.log("Usuario encontrado en el cookie check: ", userDB[0]);
     if(userDB.length === 0) return false;
     req.user = userDB[0];

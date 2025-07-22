@@ -19,7 +19,7 @@ async function login(req,res){
 
   // Check database
   const connection = await getConnection();
-  const userDB = await connection.query("SELECT * from user WHERE user = ?", user);
+  const [userDB] = await connection.query("SELECT * from user WHERE user = ?", user);
   if(userDB.length === 0) return res.status(400).send({status:"Error",message:"Error durante login"});
 
   // Compare password
@@ -64,7 +64,7 @@ async function register(req,res){
 
   // Check database
   const connection = await getConnection();
-  const userDB = await connection.query("SELECT * from user WHERE user = ?", user);
+  const [userDB] = await connection.query("SELECT * from user WHERE user = ?", user);
 
   if(userDB.length > 0) {
     console.log("Este usaurio ya existe");

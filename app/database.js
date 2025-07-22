@@ -1,11 +1,11 @@
-import mysql from "promise-mysql";
+import mysql from "mysql2/promise";
 import {
   DB_HOST,
   DB_NAME,
   DB_PASSWORD,
   DB_USER,
   DB_PORT
- } from './config.js';
+} from './config.js';
 
 let connection;
 
@@ -19,10 +19,7 @@ export const getConnection = async () => {
       password: DB_PASSWORD
     });
   }
-
-  console.log("Database config:",
-  DB_HOST, DB_PORT, DB_USER, DB_NAME
-  );
-
   return connection;
 };
+
+
