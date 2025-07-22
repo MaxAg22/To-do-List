@@ -1,14 +1,13 @@
 import jsonwebtoken from "jsonwebtoken";
-import dotenv from "dotenv";
 import { getConnection } from '../database.js';
 
-dotenv.config();
+import { JWT_SECRET } from "../config.js";
 
 async function getUserId(req,res,next) {
   const token = req.cookies.jwt;
   if (!token) return res.status(401).send("Unauthorized");
   try {
-    const payload = jsonwebtoken.verify(token, process.env.JWT_SECRET);
+    const payload = jsonwebtoken.verify(token, JWT_SECRET);
     req.user = payload;  
     next();
   } catch (err) {
@@ -31,7 +30,7 @@ async function soloPublico(req,res,next){
 async function revisarCookie(req){
   try{
     const cookieJWT = req.headers.cookie.split("; ").find(cookie => cookie.startsWith("jwt=")).slice(4);
-    const decodificada = jsonwebtoken.verify(cookieJWT,process.env.JWT_SECRET);
+    const decodificada = jsonwebtoken.verify(cookieJWT, JWT_SECRET);
     console.log("Cookie decodificada: ", JSON.stringify(decodificada));
     
     const connection = await getConnection();

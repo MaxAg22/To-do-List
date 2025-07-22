@@ -1,10 +1,11 @@
 import bcryptjs from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
-import dotenv from "dotenv";
 import { getConnection } from '../database.js';
-
-
-dotenv.config();
+import {
+  JWT_SECRET,
+  JWT_EXPIRATION,
+  JWT_COOKIE_EXPIRES
+} from '../config.js';
 
 async function login(req,res){
 

@@ -5,7 +5,8 @@
   "main": "app/index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec node app/index.js"
+    "dev": "nodemon --exec node app/index.js",
+    "start": "node app/index.js"
   },
   "keywords": [],
   "author": "",

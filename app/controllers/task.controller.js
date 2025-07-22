@@ -1,5 +1,4 @@
 import { getConnection } from '../database.js';
-import jsonwebtoken from "jsonwebtoken";
 
 async function addTask(req,res) {
   // Check input
@@ -36,11 +35,10 @@ async function loadTask(req,res) {
     const connection = await getConnection();
     const taskDB = await connection.query("SELECT * from task WHERE user_id = ?", userId);
     if(taskDB.length === 0) return res.status(200).send({status: "ok",message: ` No tasks found for user with id: ${userId}`});
-    res.json(taskDB);
     return res.status(200).send({status: "ok",message: "Tasks loaded",task: taskDB});
   } catch(error) {
     console.error("Error loading tasks:", error);
-    res.status(500).json({ status: "Error", message: "Internal server error"});
+    return res.status(500).json({ status: "Error", message: "Internal server error"});
   }
 }
 

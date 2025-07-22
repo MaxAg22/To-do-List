@@ -2,6 +2,7 @@ import  express  from "express";
 import cookieParser from 'cookie-parser';
 import morgan from "morgan";
 import cors from 'cors';
+import { PORT } from './config.js';
 
 //Fix para __direname
 import path from 'path';
@@ -13,7 +14,7 @@ import { methods as taskOptions } from "./controllers/task.controller.js";
 
 //Server
 const app = express();
-app.set("port",4000);
+app.set("port",PORT);
 app.listen(app.get("port"));
 console.log("Servidor corriendo en puerto",app.get("port"));
 
@@ -25,7 +26,7 @@ app.use(cookieParser());
 
 // Read cookies from backend
 app.use(cors({
-  origin: 'http://localhost:4000', 
+  origin: true, 
   credentials: true
 }));
 

@@ -14,9 +14,7 @@
     </header>
     
     <main class="mainContent">
-        
         <section class="container"> 
-            
             <article class="AddNewTask"> 
                 <h2> Add New Task </h2> 
                 <p class="error hide addError">Something went wrong, please try again!</p>
@@ -50,29 +48,22 @@
                                     </div>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                     <div class="buttonBox">
                         <button type="submit" class="addTaskButton roundBorder button-30">Add</button>
                         <button type="reset" class="resetButton roundBorder button-30">Clear</button>
                         <button type="button" class="orderButton roundBorder button-30" onclick="renderOrderedTasks()">Sort</button>
-
-                        <button id="signOutButton" type="button" class="roundBorder button-30" onclick="renderOrderedTasks()">sign out</button>
-
-
+                        <button id="signOutButton" type="button" class="roundBorder button-30">sign out</button>
                     </div>
                 </form>
-
             </article>
-            
+        
             <article class="formResults">
                 <h2> My tasks </h2>
                 <div id="taskContainer"></div> <!-- divs from new tasks here -->
             </article>
-
         </section>
-        
     </main>
     
     <footer>

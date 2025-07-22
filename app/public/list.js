@@ -7,7 +7,6 @@ const loadErrorMessage = document.getElementsByClassName("loadError")[0];
 const updateErrorMessage = document.getElementsByClassName("updateError")[0];
 const deleteErrorMessage = document.getElementsByClassName("deleteError")[0];
 
-
 // taskContainer
 const taskContainer = document.getElementById('taskContainer');
 
@@ -176,7 +175,7 @@ async function LoadFromDataBase() {
     const data = await res.json();
     console.log("Server response: ", data);
 
-    for(element of data){
+    for(element of data.task){
         taskDescription = element.description;
         comment = element.comment ?? "";
         dueDate = element.duedate ?? "";
