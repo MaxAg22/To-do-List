@@ -71,18 +71,37 @@ async function register(req,res){
   console.log("Register input: ", req.body);
   const user = req.body.user;
   const password = req.body.password;
+  const repeat_password = req.body.repeat_password;
   const email = req.body.email;
-  if(!user || !password || !email){
-    return res.status(400).send({status:"error",message:"Incomplete fields"})
+  
+  if(!user || !password || !repeat_password || !email) {
+    return res.status(400).send({
+      status:"error",
+      errorType:"MISSING_FIELDS",
+      message:"Incomplete fields"
+    });
+  }
+
+  if(password != repeat_password) {
+    return res.status(400).send({
+      status:"error",
+      errorType:"PASSWORD_ERROR",
+      message:"Passwords do not match"
+    });
   }
 
   // Check database
   const connection = await getConnection();
-  const [userDB] = await connection.query("SELECT * from user WHERE email = ?", email);
+  const [userDB] = await connection.query("SELECT * from user WHERE email = ? or user = ?", 
+    [email, user]);
 
   if(userDB.length > 0) {
     console.log("This user already exists");
-    return res.status(400).send({status:"error",message:"This email or username has already been taken"});
+    return res.status(400).send({
+      status:"error",
+      errorType:"EXISTS_ERROR",
+      message:"This email or username has already been taken"
+    });
   }
 
   // Verification - Create a token with user and email
@@ -96,7 +115,9 @@ async function register(req,res){
 
   const mail = await sendVerificationMail(email, token);
   if(mail.accepted===0){
-    return res(500).send({status:"error",message:"error sending verification mail"});
+    return res(500).send({
+      status:"error",
+      message:"Error sending verification mail"});
   }
 
   // Insert user in database - This generates a unique id
@@ -106,7 +127,11 @@ async function register(req,res){
   );
 
   console.log("User successfully registered", {user, email, hashPassword});
-  return res.status(201).send({status:"ok",message:`User ${user} added`,redirect:"/"})
+  return res.status(201).send({
+    status:"ok",
+    message:`User ${user} added`,
+    redirect:"/"
+  });
 }
 
 async function verifyAccount(req,res) {
@@ -118,13 +143,20 @@ async function verifyAccount(req,res) {
     const deco = jsonwebtoken.verify(req.params.token, JWT_SECRET);
     
     if(!deco || !deco.user){
-      return res.redirect("/").send({status:"error", message:"Token error"});
+      return res.redirect("/").send({
+        status:"error", 
+        message:"Token error"
+      });
     }
 
   // Check database
   const connection = await getConnection();
   const [userDB] = await connection.query("SELECT * from user WHERE email = ?", deco.email);
-  if(userDB.length === 0) return res.status(400).send({status:"error",message:"Error veryfing user"});
+  if(userDB.length === 0) {
+    return res.status(400).send({
+      status:"error",
+      message:"Error veryfing user"});
+  }
 
   // Login-in - Create the correct cookie with user id
   const token = jsonwebtoken.sign(
@@ -140,8 +172,13 @@ async function verifyAccount(req,res) {
   const [result] = await connection.query("UPDATE user SET verified = ? WHERE id = ?",
     [1, userDB[0].id]);
 
-  if (result.affectedRows === 0) return res.status(400).send({status: "error",message: "Error verifying user or user already verified"});
-  console.log("Usuario verificado correctamente");
+  if (result.affectedRows === 0) {
+    return res.status(400).send({
+      status: "error",
+      message: "Error verifying user or user already verified"
+    });
+  }
+  console.log("User successfully verified!");
 
   res.cookie("jwt",token,cookieOption);
   res.redirect("/");

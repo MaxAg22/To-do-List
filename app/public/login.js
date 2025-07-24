@@ -8,7 +8,6 @@ const missingFieldsError = document.getElementsByClassName("missingFieldsError")
 document.getElementById("login-form").addEventListener("submit",async (e)=>{
   e.preventDefault();
   
-  // si no contiene hide, lo oculto!
   if(!errorMessage.classList.contains("hide")) errorMessage.classList.toggle("hide");
   if(!notVerifiedOrRegisteredError.classList.contains("hide")) notVerifiedOrRegisteredError.classList.toggle("hide");
   if(!incorrectPasswordError.classList.contains("hide")) incorrectPasswordError.classList.toggle("hide");

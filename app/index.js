@@ -31,9 +31,9 @@ app.use(cors({
 }));
 
 //Rutas
-app.get("/",authorization.soloPublico, (req,res)=> res.sendFile(__dirname + "/pages/login.html"));
-app.get("/register",authorization.soloPublico,(req,res)=> res.sendFile(__dirname + "/pages/register.html"));
-app.get("/user",authorization.soloUser,(req,res)=> res.sendFile(__dirname + "/pages/user/list.html"));
+app.get("/",authorization.onlyPublic, (req,res)=> res.sendFile(__dirname + "/pages/login.html"));
+app.get("/register",authorization.onlyPublic,(req,res)=> res.sendFile(__dirname + "/pages/register.html"));
+app.get("/user",authorization.onlyUser,(req,res)=> res.sendFile(__dirname + "/pages/user/list.html"));
 app.post("/api/login",authentication.login);
 app.post("/api/register",authentication.register);
 app.get("/verification/:token",authentication.verifyAccount);
