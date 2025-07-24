@@ -36,6 +36,7 @@ app.get("/register",authorization.soloPublico,(req,res)=> res.sendFile(__dirname
 app.get("/user",authorization.soloUser,(req,res)=> res.sendFile(__dirname + "/pages/user/list.html"));
 app.post("/api/login",authentication.login);
 app.post("/api/register",authentication.register);
+app.get("/verification/:token",authentication.verifyAccount);
 
 //Task
 app.post("/api/addTask", authorization.getUserId, taskOptions.addTask);
